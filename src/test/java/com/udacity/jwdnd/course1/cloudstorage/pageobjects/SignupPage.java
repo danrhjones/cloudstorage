@@ -25,6 +25,9 @@ public class SignupPage {
     @FindBy(css="#success-msg")
     private WebElement successMessage;
 
+    @FindBy(css="#error-msg")
+    private WebElement errorMessage;
+
     public SignupPage(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
     }
@@ -39,5 +42,9 @@ public class SignupPage {
 
     public Boolean isSuccessMessageDisplayed() {
         return successMessage.isDisplayed();
+    }
+
+    public String getErrorMessage() {
+        return this.errorMessage.getText();
     }
 }

@@ -19,6 +19,9 @@ public class LoginPage {
     @FindBy(css="#logoutDiv")
     private WebElement loginBar;
 
+    @FindBy(css="#error-msg")
+    private WebElement errorMessage;
+
     public LoginPage(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
     }
@@ -33,5 +36,7 @@ public class LoginPage {
         return this.loginBar.isDisplayed();
     }
 
-
+    public String getErrorMessage() {
+        return this.errorMessage.getText();
+    }
 }

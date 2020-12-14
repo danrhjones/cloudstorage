@@ -72,4 +72,34 @@ class CloudStorageApplicationTests {
 
     }
 
+    @Test
+    public void testErrorMessageIfDuplicateUserSignsUp() {
+
+        String username = "cloudstorage";
+        String password = "whatabadpassword";
+
+        driver.get(baseURL + "/signup");
+
+        SignupPage signupPage = new SignupPage(driver);
+        signupPage.signup("James", "Hill", username, password);
+
+        signupPage.signup("James", "Hill", username, password);
+
+        assertEquals(signupPage.getErrorMessage(), "The username already exists.");
+    }
+
+
+    @Test
+    public void testAttemptLoginWithInvalidUser() {
+
+        String username = "doesnt";
+        String password = "exist";
+
+        driver.get(baseURL + "/login");
+
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login(username, password);
+
+        assertEquals(loginPage.getErrorMessage(), "Invalid username or password");
+    }
 }
