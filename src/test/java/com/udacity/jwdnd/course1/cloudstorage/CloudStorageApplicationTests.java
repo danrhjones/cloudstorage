@@ -13,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
@@ -30,7 +32,18 @@ class CloudStorageApplicationTests {
     @BeforeAll
     public static void beforeAll() {
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--headless");
+        DesiredCapabilities chrome = DesiredCapabilities.chrome();
+        chrome.setJavascriptEnabled(true);
+        options.setCapability(ChromeOptions.CAPABILITY, options);
+
+        //Create driver object for Chrome
+        driver = new ChromeDriver(options);
     }
 
     @AfterAll
