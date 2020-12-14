@@ -82,7 +82,6 @@ class CloudStorageApplicationTests {
         homePage.logout();
 
         assertEquals(driver.getCurrentUrl(), baseURL + "/login");
-        assertEquals(true, false);
 
     }
 
