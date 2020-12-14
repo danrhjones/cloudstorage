@@ -42,7 +42,7 @@ jobs:
       - name: Build with Maven
         run: mvn test
 
-      - name: Publish Unit Test Results
+      - name: Publish Selenium Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.6
         if: always()
         with:
