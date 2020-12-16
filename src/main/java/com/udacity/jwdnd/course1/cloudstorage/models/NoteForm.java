@@ -5,11 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Note {
+public class NoteForm {
 
-    private int noteid;
+    private Integer noteid;
     private String notetitle;
     private String notedescription;
     private Integer userid;
-}
 
+}
