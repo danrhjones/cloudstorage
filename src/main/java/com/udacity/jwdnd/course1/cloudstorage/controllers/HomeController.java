@@ -20,8 +20,9 @@ public class HomeController {
 
     @GetMapping
     public String getHomePage(Authentication authentication, Model model) {
-        model.addAttribute("notes", this.noteService.getAllNotes());
+        model.addAttribute("notes", this.noteService.getAllNotes(authentication.getName()));
         return "home";
     }
+
 
 }

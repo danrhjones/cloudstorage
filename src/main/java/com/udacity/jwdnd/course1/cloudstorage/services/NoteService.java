@@ -24,10 +24,6 @@ public class NoteService {
         System.out.println("Creating NoteService bean");
     }
 
-    public List<Note> getAllNotes() {
-        return noteMapper.findAll();
-    }
-
     public void addNote(Note note, int userid) {
         noteMapper.insertNote(note, userid);
     }
@@ -35,6 +31,10 @@ public class NoteService {
     public int getUserId(String username) {
         User user = userMapper.getUser(username);
         return user.getUserId();
+    }
+
+    public List<Note> getAllNotes() {
+        return noteMapper.findAll();
     }
 
     public List<Note> getAllNotes(String username) {
@@ -48,5 +48,9 @@ public class NoteService {
 
     public Note getNote(int noteid) {
         return noteMapper.findOne(noteid);
+    }
+
+    public void updateNote(Note note) {
+        noteMapper.updateNote(note);
     }
 }
