@@ -6,7 +6,9 @@ import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -36,5 +38,14 @@ public class NoteController {
         model.addAttribute("notes", this.noteService.getAllNotes(authentication.getName()));
 
         return "home";
+    }
+
+    @GetMapping("/note/delete/{noteid}")
+    public String deleteNote(@PathVariable("noteid") int noteid) {
+        if (noteService.getNote(noteid) == null) {
+            return "redirect:/result?error";
+        }
+        noteService.deleteNote(noteid);
+        return "redirect:/result?success";
     }
 }

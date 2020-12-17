@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
+                        <button id="add-note-button" style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
                             + Add a New Note
                         </button>
                         <div class="table-responsive">
@@ -80,7 +80,7 @@
                                             <button class="btn btn-success edit-note" th:onclick="javascript:showNoteModal([[${note}]])"
                                                     type="button">Edit
                                             </button>
-                                            <a class="delete-note btn btn-danger" th:href="@{/notes/delete(id=${note.noteid})}">Delete</a>
+                                            <a class="delete-note btn btn-danger" th:href="${'/home/note/delete/'+note.noteid}">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${note.notetitle}"></th>
                                         <td th:text="${note.notedescription}"></td>
