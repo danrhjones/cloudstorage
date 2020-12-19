@@ -1,34 +1,28 @@
 package com.udacity.jwdnd.course1.cloudstorage.controllers;
 
 import com.udacity.jwdnd.course1.cloudstorage.models.Note;
-import com.udacity.jwdnd.course1.cloudstorage.models.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/home")
 public class NoteController {
 
     private NoteService noteService;
+    private UserService userService;
 
-    public NoteController(NoteService noteService) {
+    public NoteController(NoteService noteService, UserService userService) {
         this.noteService = noteService;
+        this.userService = userService;
     }
 
-    public String getNotes(NoteForm noteForm, Model model) {
-        model.addAttribute("notes", this.noteService.getAllNotes());
-        return "home";
-    }
-
-    @PostMapping()
+    @PostMapping("/note")
     public String createOrUpdateNote(Authentication authentication, Note note) {
-        int userid = noteService.getUserId(authentication.getName());
+        int userid = userService.getUserid(authentication.getName());
 
         if (noteService.getNote(note.getNoteid()) == null) {
             noteService.addNote(note, userid);

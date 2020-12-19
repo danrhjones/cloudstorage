@@ -80,7 +80,7 @@
                                             <button class="btn btn-success edit-note" th:onclick="javascript:showNoteModal([[${note}]])"
                                                     type="button">Edit
                                             </button>
-                                            <a class="delete-note btn btn-danger" th:href="${'/home/note/delete/'+note.noteid}">Delete</a>
+                                            <a class="delete-note btn btn-danger" th:href="${'/note/delete/'+note.noteid}">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${note.notetitle}"></th>
                                         <td th:text="${note.notedescription}"></td>
@@ -101,7 +101,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <!--/*@thymesVar id="noteForm" type="com.udacity.jwdnd.course1.cloudstorage.models.NoteForm"*/-->
-                                        <form th:object="${noteForm}" action="#" th:action="@{/home}" method="POST">
+                                        <form th:object="${noteForm}" action="#" th:action="@{/note}" method="POST">
                                             <input type="hidden" name="noteid" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>
@@ -138,14 +138,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="credential : ${credentials}">
                                     <td>
-                                        <button type="button" class="btn btn-success">Edit</button>
-                                        <a class="btn btn-danger">Delete</a>
+                                        <button class="btn btn-success edit-credential" th:onclick="javascript:showCredentialModal([[${credential}]])"
+                                                type="button">Edit</button>
+                                        <a class="delete-note btn btn-danger" th:href="${'/credential/delete/'+credential.credentialid}">Delete</a>
                                     </td>
-                                    <th scope="row">Example Credential URL</th>
-                                    <td>Example Credential Username</td>
-                                    <td>Example Credential Password</td>
+                                    <th scope="row" th:text="${credential.url}"></th>
+
+                                    <td th:text="${credential.username}"></td>
+                                    <td th:text="${credential.key}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -161,8 +163,9 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" method="POST">
-                                            <input type="hidden" name="credentialId" id="credential-id">
+                                        <!--/*@thymesVar id="credentialForm" type="com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialMapper"*/-->
+                                        <form th:object="${credentialForm}" action="#" th:action="@{/credential}" method="POST">
+                                            <input type="hidden" name="credentialid" id="credential-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">URL</label>
                                                 <input type="text" name= "url" class="form-control" id="credential-url" maxlength="100" required>
@@ -205,11 +208,11 @@
             }
 
             // For opening the credentials modal
-            function showCredentialModal(credentialId, url, username, password) {
-                $('#credential-id').val(credentialId ? credentialId : '');
-                $('#credential-url').val(url ? url : '');
-                $('#credential-username').val(username ? username : '');
-                $('#credential-password').val(password ? password : '');
+            function showCredentialModal(credential) {
+                $('#credential-id').val(credential && credential.credentialid ? credential.credentialid : 0);
+                $('#credential-url').val(credential && credential.url ? credential.url : '');
+                $('#credential-username').val(credential && credential.username ? credential.username : '');
+                $('#credential-password').val(credential && credential.password ? credential.password : '');
                 $('#credentialModal').modal('show');
             }
         </script>

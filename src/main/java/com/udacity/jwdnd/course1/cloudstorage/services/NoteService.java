@@ -5,7 +5,6 @@ import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.models.Note;
 import com.udacity.jwdnd.course1.cloudstorage.models.User;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,19 +18,14 @@ public class NoteService {
         this.noteMapper = noteMapper;
     }
 
-    @PostConstruct
-    public void postConstruct() {
-        System.out.println("Creating NoteService bean");
-    }
-
     public void addNote(Note note, int userid) {
         noteMapper.insertNote(note, userid);
     }
 
-    public int getUserId(String username) {
-        User user = userMapper.getUser(username);
-        return user.getUserId();
-    }
+//    public int getUserId(String username) {
+//        User user = userMapper.getUser(username);
+//        return user.getUserId();
+//    }
 
     public List<Note> getAllNotes() {
         return noteMapper.findAll();

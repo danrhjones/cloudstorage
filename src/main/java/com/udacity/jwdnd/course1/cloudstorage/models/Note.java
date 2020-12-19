@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Note {
 
-    private int noteid;
+    private Integer noteid;
     private String notetitle;
     private String notedescription;
     private Integer userid;
