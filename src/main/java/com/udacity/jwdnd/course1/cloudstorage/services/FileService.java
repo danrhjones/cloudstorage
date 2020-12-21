@@ -30,7 +30,7 @@ public class FileService {
         file.setContenttype(multipartFile.getContentType());
         file.setFiledata(multipartFile.getBytes());
         file.setFilename(multipartFile.getOriginalFilename());
-        file.setFilesize(Long.toString(multipartFile.getSize()));;
+        file.setFilesize(Long.toString(multipartFile.getSize()));
 
         return fileMapper.insertFile(file, userid);
     }
@@ -42,5 +42,9 @@ public class FileService {
 
     public void deleteFile(int fileid) {
         fileMapper.deleteFile(fileid);
+    }
+
+    public File fileExists(String filename) {
+        return fileMapper.findByFilename(filename);
     }
 }

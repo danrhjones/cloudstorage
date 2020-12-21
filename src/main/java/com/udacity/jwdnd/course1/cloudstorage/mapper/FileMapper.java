@@ -26,4 +26,6 @@ public interface FileMapper {
     @Delete("DELETE FROM FILES WHERE fileid = #{fileid}")
     int deleteFile(int fileid);
 
+    @Select("SELECT * FROM FILES WHERE filename = #{filename}")
+    File findByFilename(String filename);
 }
