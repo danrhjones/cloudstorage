@@ -22,11 +22,6 @@ public class NoteService {
         noteMapper.insertNote(note, userid);
     }
 
-//    public int getUserId(String username) {
-//        User user = userMapper.getUser(username);
-//        return user.getUserId();
-//    }
-
     public List<Note> getAllNotes() {
         return noteMapper.findAll();
     }

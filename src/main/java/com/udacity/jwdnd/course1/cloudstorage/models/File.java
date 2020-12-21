@@ -2,20 +2,21 @@ package com.udacity.jwdnd.course1.cloudstorage.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class File {
 
-    private String fileId;
+    private Integer fileid;
     private String filename;
     private String contenttype;
     private String filesize;
-    private int userid;
-    private String filedata;
-    private int userId;
+    private Integer userid;
+    private byte[] filedata;
 
 }
