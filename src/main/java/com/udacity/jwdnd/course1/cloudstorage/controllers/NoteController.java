@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class NoteController {
 
-    private NoteService noteService;
-    private UserService userService;
+    private final NoteService noteService;
+    private final UserService userService;
 
     public NoteController(NoteService noteService, UserService userService) {
         this.noteService = noteService;

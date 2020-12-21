@@ -12,8 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileService {
 
-    private FileMapper fileMapper;
-    private UserMapper userMapper;
+    private final FileMapper fileMapper;
+    private final UserMapper userMapper;
 
     public FileService(FileMapper fileMapper,
         UserMapper userMapper) {
@@ -25,14 +25,14 @@ public class FileService {
         return fileMapper.findOne(fileid);
     }
 
-    public int addFile(MultipartFile multipartFile, int userid) throws IOException {
+    public void addFile(MultipartFile multipartFile, int userid) throws IOException {
         File file = new File();
         file.setContenttype(multipartFile.getContentType());
         file.setFiledata(multipartFile.getBytes());
         file.setFilename(multipartFile.getOriginalFilename());
         file.setFilesize(Long.toString(multipartFile.getSize()));
 
-        return fileMapper.insertFile(file, userid);
+        fileMapper.insertFile(file, userid);
     }
 
     public List<File> getAllfiles(String username) {

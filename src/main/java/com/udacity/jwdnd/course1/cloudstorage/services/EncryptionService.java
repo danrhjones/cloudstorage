@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EncryptionService {
-    private Logger logger = LoggerFactory.getLogger(EncryptionService.class);
+    private final Logger logger = LoggerFactory.getLogger(EncryptionService.class);
 
     public String encryptValue(String data, String key) {
         byte[] encryptedValue = null;

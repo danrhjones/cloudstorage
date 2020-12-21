@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class FileController {
 
-    private UserService userService;
-    private FileService fileService;
+    private final UserService userService;
+    private final FileService fileService;
 
 
     public FileController(UserService userService, FileService fileService) {

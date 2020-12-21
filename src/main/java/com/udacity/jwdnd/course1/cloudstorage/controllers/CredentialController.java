@@ -12,14 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class CredentialController {
 
-    private CredentialService credentialService;
-    private UserService userService;
+    private final CredentialService credentialService;
+    private final UserService userService;
 
     public CredentialController(CredentialService credentialService, UserService userService) {
         this.credentialService = credentialService;
         this.userService = userService;
     }
 
+    @SuppressWarnings("SameReturnValue")
     @PostMapping("/credential")
     public String createOrUpdateCredential(Authentication authentication, Credential credential) {
         int userid = userService.getUserid(authentication.getName());

@@ -22,13 +22,13 @@ public interface NoteMapper {
     List<Note> findByUserId(Integer userid);
 
     @Insert("INSERT INTO NOTES (notetitle, notedescription, userid) VALUES(#{note.notetitle}, #{note.notedescription},  #{userid})")
-    int insertNote(Note note, int userid);
+    void insertNote(Note note, int userid);
 
     @Update(
         "UPDATE NOTES SET notetitle = #{notetitle}, notedescription = #{notedescription} WHERE noteid = #{noteid}")
-    int updateNote(Note note);
+    void updateNote(Note note);
 
     @Delete("DELETE FROM NOTES WHERE noteid = #{noteid}")
-    int deleteNote(int noteid);
+    void deleteNote(int noteid);
 }
 
