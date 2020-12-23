@@ -1,8 +1,11 @@
 package com.udacity.jwdnd.course1.cloudstorage.controllers;
 
+import com.udacity.jwdnd.course1.cloudstorage.models.File;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import java.io.IOException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +29,7 @@ public class FileController {
     public String createOrUpdateFile(Authentication authentication, MultipartFile fileUpload) throws IOException {
         int userid = userService.getUserid(authentication.getName());
 
-        if (fileUpload.isEmpty() || fileService.fileExists(fileUpload.getOriginalFilename()) != null) {
+        if (fileUpload.isEmpty() || fileService.getFile(fileUpload.getOriginalFilename()) != null) {
             return "redirect:/result?error";
         }
         fileService.addFile(fileUpload, userid);
@@ -40,5 +43,16 @@ public class FileController {
         }
         fileService.deleteFile(fileid);
         return "redirect:/result?success";
+    }
+
+    @GetMapping("/download/{filename}")
+    public ResponseEntity download(@PathVariable("filename") String filename){
+        File file = fileService.getFile(filename);
+
+        return ResponseEntity.ok()
+            .header(
+                HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+            .body(file);
+
     }
 }

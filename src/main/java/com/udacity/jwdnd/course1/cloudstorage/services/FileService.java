@@ -25,6 +25,10 @@ public class FileService {
         return fileMapper.findOne(fileid);
     }
 
+    public File getFile(String filename) {
+        return fileMapper.findByFilename(filename);
+    }
+
     public void addFile(MultipartFile multipartFile, int userid) throws IOException {
         File file = new File();
         file.setContenttype(multipartFile.getContentType());
@@ -44,7 +48,4 @@ public class FileService {
         fileMapper.deleteFile(fileid);
     }
 
-    public File fileExists(String filename) {
-        return fileMapper.findByFilename(filename);
-    }
 }
