@@ -22,6 +22,7 @@ public class UserService {
     @PostConstruct
     public void postConstruct() {
         createUser("admin", "admin");
+        createUser("user", "user");
     }
 
     public boolean isUsernameAvailable(String username) {

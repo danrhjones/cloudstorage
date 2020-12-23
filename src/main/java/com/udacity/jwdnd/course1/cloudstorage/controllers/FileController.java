@@ -37,8 +37,11 @@ public class FileController {
     }
 
     @GetMapping("/file/delete/{fileid}")
-    public String deleteCredential(@PathVariable("fileid") int fileid) {
-        if (fileService.getFile(fileid) == null) {
+    public String deleteCredential(@PathVariable("fileid") int fileid, Authentication authentication) {
+        int userid = userService.getUserid(authentication.getName());
+
+        if (fileService.getFile(fileid) == null ||
+            fileService.getFile(fileid).getUserid() != userid) {
             return "redirect:/result?error";
         }
         fileService.deleteFile(fileid);

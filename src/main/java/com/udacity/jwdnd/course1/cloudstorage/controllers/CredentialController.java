@@ -34,8 +34,11 @@ public class CredentialController {
     }
 
     @GetMapping("/credential/delete/{credentialid}")
-    public String deleteCredential(@PathVariable("credentialid") int credentialid) {
-        if (credentialService.getCredential(credentialid) == null) {
+    public String deleteCredential(@PathVariable("credentialid") int credentialid, Authentication authentication) {
+        int userid = userService.getUserid(authentication.getName());
+
+        if (credentialService.getCredential(credentialid) == null ||
+            credentialService.getCredential(credentialid).getUserid() != userid) {
             return "redirect:/result?error";
         }
         credentialService.deleteCredential(credentialid);

@@ -33,8 +33,11 @@ public class NoteController {
     }
 
     @GetMapping("/note/delete/{noteid}")
-    public String deleteNote(@PathVariable("noteid") int noteid) {
-        if (noteService.getNote(noteid) == null) {
+    public String deleteNote(@PathVariable("noteid") int noteid, Authentication authentication) {
+        int userid = userService.getUserid(authentication.getName());
+
+        if (noteService.getNote(noteid) == null ||
+            noteService.getNote(noteid).getUserid() != userid) {
             return "redirect:/result?error";
         }
         noteService.deleteNote(noteid);
