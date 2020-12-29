@@ -81,8 +81,8 @@
                                             </button>
                                             <a class="delete-note btn btn-danger" th:href="${'/note/delete/'+note.noteid}">Delete</a>
                                         </td>
-                                        <th scope="row" th:text="${note.notetitle}"></th>
-                                        <td th:text="${note.notedescription}"></td>
+                                        <th class="note-title" scope="row" th:text="${note.notetitle}"></th>
+                                        <td class="note-description" th:text="${note.notedescription}"></td>
                                     </tr>
                                 </tbody>
                             </table>

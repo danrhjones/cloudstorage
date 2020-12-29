@@ -5,24 +5,37 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class HomePage {
+public class HomePage extends Utils {
+
+    @FindBy(css=".note-title")
+    public WebElement noteTitleField;
+
+    @FindBy(css=".note-description")
+    public WebElement noteDescriptionField;
+
     @FindBy(css="#logout-button")
     private WebElement logoutButton;
 
     @FindBy(css="#add-note-button")
-    private WebElement addNoteButton;
+    public WebElement addNoteButton;
 
     @FindBy(css="#note-title")
-    private WebElement modalNoteTitle;
+    public WebElement modalNoteTitle;
 
     @FindBy(css="#note-description")
-    private WebElement modalNoteDescription;
+    public WebElement modalNoteDescription;
 
     @FindBy(css="#noteSubmit")
-    private WebElement modalNoteSubmit;
+    public WebElement modalNoteSubmit;
 
     @FindBy(css="#nav-notes-tab")
-    private WebElement noteTab;
+    public WebElement noteTab;
+
+    @FindBy(css=".edit-note")
+    public WebElement editNoteButton;
+
+    @FindBy(css=".delete-note")
+    public WebElement deleteNoteButton;
 
     public HomePage(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
@@ -32,15 +45,4 @@ public class HomePage {
         logoutButton.click();
     }
 
-    public void addNote(String noteTitle, String noteDescription) {
-
-        addNoteButton.click();
-        modalNoteTitle.sendKeys(noteTitle);
-        modalNoteDescription.sendKeys(noteTitle);
-        modalNoteSubmit.submit();
-    }
-
-    public void openNoteTab() {
-        noteTab.click();
-    }
 }

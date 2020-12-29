@@ -1,49 +1,36 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.udacity.jwdnd.course1.cloudstorage.pageobjects.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.pageobjects.LoginPage;
+import com.udacity.jwdnd.course1.cloudstorage.pageobjects.ResultsPage;
 import com.udacity.jwdnd.course1.cloudstorage.pageobjects.SignupPage;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.udacity.jwdnd.course1.cloudstorage.pageobjects.Utils;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CloudStorageApplicationTests {
+class CloudStorageApplicationTests extends Utils {
 
     @LocalServerPort
     public int port;
 
-    public static WebDriver driver;
+    private final SignupPage signupPage = new SignupPage(driver);
+    private final LoginPage loginPage = new LoginPage(driver);
+    private final HomePage homePage = new HomePage(driver);
+    private final ResultsPage resultsPage = new ResultsPage(driver);
 
-    public String baseURL;
-
-    @BeforeAll
-    public static void beforeAll() {
-        WebDriverManager.chromedriver().setup();
-
-
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--headless");
-        DesiredCapabilities chrome = DesiredCapabilities.chrome();
-        chrome.setJavascriptEnabled(true);
-        options.setCapability(ChromeOptions.CAPABILITY, options);
-
-        //Create driver object for Chrome
-        driver = new ChromeDriver(options);
+    @BeforeEach
+    public void beforeEach() {
+        baseURL = "http://localhost:" + port;
     }
 
     @AfterAll
@@ -52,67 +39,84 @@ class CloudStorageApplicationTests {
         driver = null;
     }
 
-    @BeforeEach
-    public void beforeEach() {
-        baseURL = baseURL = "http://localhost:" + port;
-    }
-
     @Test
     public void testUserSignupLogsInAndLogsOut() {
-        String username = "cloudstorage";
-        String password = "whatabadpassword";
-
-        driver.get(baseURL + "/signup");
-
-        SignupPage signupPage = new SignupPage(driver);
-        signupPage.signup("James", "Hill", username, password);
-
+        signUp("user1", "password");
         assertTrue(signupPage.isSuccessMessageDisplayed());
 
-        driver.get(baseURL + "/login");
-
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(username, password);
-
+        login("user1", "password");
         assertTrue(loginPage.loginBarIsDisplayed());
 
         driver.get(baseURL + "/home");
-
-        HomePage homePage = new HomePage(driver);
         homePage.logout();
-
         assertEquals(driver.getCurrentUrl(), baseURL + "/login");
-
     }
 
     @Test
     public void testErrorMessageIfDuplicateUserSignsUp() {
-
-        String username = "cloudstorage";
-        String password = "whatabadpassword";
-
-        driver.get(baseURL + "/signup");
-
-        SignupPage signupPage = new SignupPage(driver);
-        signupPage.signup("James", "Hill", username, password);
-
-        signupPage.signup("James", "Hill", username, password);
+        signUp("user2", "password");
+        signUp("user2", "password");
 
         assertEquals(signupPage.getErrorMessage(), "The username already exists.");
     }
 
-
     @Test
     public void testAttemptLoginWithInvalidUser() {
-
         String username = "doesnt";
         String password = "exist";
 
-        driver.get(baseURL + "/login");
-
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(username, password);
-
+        login(username, password);
         assertEquals(loginPage.getErrorMessage(), "Invalid username or password");
     }
+
+    @Test
+    public void createEditDeleteNote() {
+        signUp("user", "password");
+        login("user", "password");
+
+        waitAndClickElement(driver, homePage.noteTab);
+        waitAndClickElement(driver, homePage.addNoteButton);
+        waitAndClickElement(driver, homePage.modalNoteTitle);
+
+        sendTextTo("My Note Title", homePage.modalNoteTitle);
+        waitAndClickElement(driver, homePage.modalNoteDescription);
+
+        sendTextTo("My Note Description", homePage.modalNoteDescription);
+        click(homePage.modalNoteSubmit);
+
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
+
+        driver.get(baseURL + "/home");
+
+        waitAndClickElement(driver, homePage.noteTab);
+        waitUntil(ExpectedConditions.elementToBeClickable(homePage.addNoteButton));
+
+        assertThat(homePage.noteTitleField.getText(), is("My Note Title"));
+        assertThat(homePage.noteDescriptionField.getText(), is("My Note Description"));
+
+        waitAndClickElement(driver, homePage.editNoteButton);
+        sendTextTo("Edited Note Title", homePage.modalNoteTitle);
+        waitAndClickElement(driver, homePage.modalNoteDescription);
+
+        sendTextTo("Edited Note Description", homePage.modalNoteDescription);
+        click(homePage.modalNoteSubmit);
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
+
+        driver.get(baseURL + "/home");
+
+        waitAndClickElement(driver, homePage.noteTab);
+        waitUntil(ExpectedConditions.elementToBeClickable(homePage.addNoteButton));
+
+        assertThat(homePage.noteTitleField.getText(), is("Edited Note Title"));
+        assertThat(homePage.noteDescriptionField.getText(), is("Edited Note Description"));
+
+        waitAndClickElement(driver, homePage.deleteNoteButton);
+
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
+
+    }
+
 }

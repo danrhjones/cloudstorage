@@ -21,8 +21,8 @@ public class UserService {
 
     @PostConstruct
     public void postConstruct() {
-        createUser("admin", "admin");
-        createUser("user", "user");
+//        createUser("admin", "admin");
+//        createUser("user", "user");
     }
 
     public boolean isUsernameAvailable(String username) {
@@ -38,7 +38,7 @@ public class UserService {
         return userMapper.insert(new User(null, user.getUsername(), encodedSalt, hashedPassword, user.getFirstName(), user.getLastName()));
     }
 
-    private void createUser(String username, String password) {
+    public void createUser(String username, String password) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
