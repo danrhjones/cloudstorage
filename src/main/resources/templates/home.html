@@ -97,7 +97,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <!--/*@thymesVar id="noteForm" type="com.udacity.jwdnd.course1.cloudstorage.models.NoteForm"*/-->
+                                        <!--/*@thymesVar id="noteForm" type="tech.danjones.cloudstorage.models.NoteForm"*/-->
                                         <form th:object="${noteForm}" action="#" th:action="@{/note}" method="POST">
                                             <input type="hidden" name="noteid" id="note-id">
                                             <div class="form-group">
@@ -159,7 +159,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <!--/*@thymesVar id="credentialForm" type="com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialMapper"*/-->
+                                        <!--/*@thymesVar id="credentialForm" type="tech.danjones.cloudstorage.mapper.CredentialMapper"*/-->
                                         <form th:object="${credentialForm}" action="#" th:action="@{/credential}" method="POST">
                                             <input type="hidden" name="credentialid" id="credential-id">
                                             <div class="form-group">

@@ -9,11 +9,11 @@
     <version>2.2.4.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  <groupId>com.udacity.jwdnd.course1</groupId>
+  <groupId>tech.danjones</groupId>
   <artifactId>cloudstorage</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>cloudstorage</name>
-  <description>Final Project for Udacity's Spring Boot Basics course.</description>
+  <description>A secure file, notes and credentials app.</description>
 
   <properties>
     <java.version>11</java.version>
