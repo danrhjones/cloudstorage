@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -113,6 +114,68 @@ class CloudStorageApplicationTests extends Utils {
         assertThat(homePage.noteDescriptionField.getText(), is("Edited Note Description"));
 
         waitAndClickElement(driver, homePage.deleteNoteButton);
+
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
+
+    }
+
+    @Test
+    public void createEditDeleteACredential() {
+        signUp("user", "password");
+        login("user", "password");
+
+        waitAndClickElement(driver, homePage.credentialTab);
+        waitAndClickElement(driver, homePage.addCredentialButton);
+
+        waitAndClickElement(driver, homePage.modalCredentialUrl);
+        sendTextTo("www.udacity.com", homePage.modalCredentialUrl);
+
+        waitAndClickElement(driver, homePage.modalCredentialUsername);
+        sendTextTo("jonnyives", homePage.modalCredentialUsername);
+
+        waitAndClickElement(driver, homePage.modalCredentialPassword);
+        sendTextTo("apple123", homePage.modalCredentialPassword);
+
+        click(homePage.modalCredentialSubmit);
+
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
+
+        driver.get(baseURL + "/home");
+
+        waitAndClickElement(driver, homePage.credentialTab);
+        waitUntil(ExpectedConditions.elementToBeClickable(homePage.addCredentialButton));
+
+        assertThat(homePage.credentialUrlField.getText(), is("www.udacity.com"));
+        assertThat(homePage.credentialUsernameField.getText(), is("jonnyives"));
+        assertThat(homePage.credentialPasswordField.getText(), is(not("apple123")));
+
+        waitAndClickElement(driver, homePage.editCredentialButton);
+
+        waitAndClickElement(driver, homePage.modalCredentialUrl);
+        sendTextTo("www.other.com", homePage.modalCredentialUrl);
+
+        waitAndClickElement(driver, homePage.modalCredentialUsername);
+        sendTextTo("TimCook", homePage.modalCredentialUsername);
+
+        waitAndClickElement(driver, homePage.modalCredentialPassword);
+        sendTextTo("password123", homePage.modalCredentialPassword);
+
+        click(homePage.modalCredentialSubmit);
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
+
+        driver.get(baseURL + "/home");
+
+        waitAndClickElement(driver, homePage.credentialTab);
+        waitUntil(ExpectedConditions.elementToBeClickable(homePage.addCredentialButton));
+
+        assertThat(homePage.credentialUrlField.getText(), is("www.other.com"));
+        assertThat(homePage.credentialUsernameField.getText(), is("TimCook"));
+        assertThat(homePage.credentialPasswordField.getText(), is(not("password123")));
+
+        waitAndClickElement(driver, homePage.deleteCredentialButton);
 
         waitUntil(ExpectedConditions.titleContains("Result"));
         assertThat(driver.getTitle(), is("Result"));

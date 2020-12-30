@@ -60,13 +60,11 @@ public class Utils {
 
     public void signUp(String username, String password) {
         driver.get(baseURL + "/signup");
-//        SignupPage signupPage = new SignupPage(driver);
         signupPage.signup("James", "Hill", username, password);
     }
 
     public void login(String username, String password) {
         driver.get(baseURL + "/login");
-
         loginPage.login(username, password);
     }
 }

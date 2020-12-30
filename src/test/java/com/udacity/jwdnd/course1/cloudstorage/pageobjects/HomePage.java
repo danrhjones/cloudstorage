@@ -37,6 +37,39 @@ public class HomePage extends Utils {
     @FindBy(css=".delete-note")
     public WebElement deleteNoteButton;
 
+    @FindBy(css="#nav-credentials-tab")
+    public WebElement credentialTab;
+
+    @FindBy(css="#add-credential-button")
+    public WebElement addCredentialButton;
+
+    @FindBy(css="#credential-url")
+    public WebElement modalCredentialUrl;
+
+    @FindBy(css="#credential-username")
+    public WebElement modalCredentialUsername;
+
+    @FindBy(css="#credential-password")
+    public WebElement modalCredentialPassword;
+
+    @FindBy(css="#credentialSubmit")
+    public WebElement modalCredentialSubmit;
+
+    @FindBy(css=".credential-url")
+    public WebElement credentialUrlField;
+
+    @FindBy(css=".credential-username")
+    public WebElement credentialUsernameField;
+
+    @FindBy(css=".credential-password-key")
+    public WebElement credentialPasswordField;
+
+    @FindBy(css=".delete-credential")
+    public WebElement deleteCredentialButton;
+
+    @FindBy(css=".edit-credential")
+    public WebElement editCredentialButton;
+
     public HomePage(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
     }
