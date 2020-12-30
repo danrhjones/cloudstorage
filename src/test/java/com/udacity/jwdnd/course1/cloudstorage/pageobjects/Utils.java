@@ -30,7 +30,7 @@ public class Utils {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
-//        options.addArguments("--headless");
+        options.addArguments("--headless");
         DesiredCapabilities chrome = DesiredCapabilities.chrome();
         chrome.setJavascriptEnabled(true);
         options.setCapability(ChromeOptions.CAPABILITY, options);
