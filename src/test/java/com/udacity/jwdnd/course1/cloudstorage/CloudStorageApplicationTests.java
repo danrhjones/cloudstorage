@@ -12,6 +12,7 @@ import com.udacity.jwdnd.course1.cloudstorage.pageobjects.ResultsPage;
 import com.udacity.jwdnd.course1.cloudstorage.pageobjects.SignupPage;
 import com.udacity.jwdnd.course1.cloudstorage.pageobjects.Utils;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -34,6 +35,11 @@ class CloudStorageApplicationTests extends Utils {
         baseURL = "http://localhost:" + port;
     }
 
+    @AfterEach
+    public void afterEach() {
+        driver.manage().deleteAllCookies();
+    }
+
     @AfterAll
     public static void afterAll() {
         driver.quit();
@@ -50,6 +56,14 @@ class CloudStorageApplicationTests extends Utils {
 
         driver.get(baseURL + "/home");
         homePage.logout();
+        assertEquals(driver.getCurrentUrl(), baseURL + "/login");
+        driver.get(baseURL + "/home");
+        assertEquals(driver.getCurrentUrl(), baseURL + "/login");
+    }
+
+    @Test
+    public void testUnauthorisedUserUnableToAccessHomepage() {
+        driver.get(baseURL + "/home");
         assertEquals(driver.getCurrentUrl(), baseURL + "/login");
     }
 
@@ -71,19 +85,11 @@ class CloudStorageApplicationTests extends Utils {
     }
 
     @Test
-    public void createEditDeleteNote() {
-        signUp("user", "password");
-        login("user", "password");
+    public void testCreateNote() {
+        signUp("createNote", "password");
+        login("createNote", "password");
 
-        waitAndClickElement(driver, homePage.noteTab);
-        waitAndClickElement(driver, homePage.addNoteButton);
-        waitAndClickElement(driver, homePage.modalNoteTitle);
-
-        sendTextTo("My Note Title", homePage.modalNoteTitle);
-        waitAndClickElement(driver, homePage.modalNoteDescription);
-
-        sendTextTo("My Note Description", homePage.modalNoteDescription);
-        click(homePage.modalNoteSubmit);
+        createNote("My Note Title", "My Note Description");
 
         waitUntil(ExpectedConditions.titleContains("Result"));
         assertThat(driver.getTitle(), is("Result"));
@@ -117,27 +123,79 @@ class CloudStorageApplicationTests extends Utils {
 
         waitUntil(ExpectedConditions.titleContains("Result"));
         assertThat(driver.getTitle(), is("Result"));
+    }
+
+    @Test
+    public void testEditNote() {
+        signUp("editnote", "password");
+        login("editnote", "password");
+
+        createNote("My Note Title", "My Note Description");
+
+        driver.get(baseURL + "/home");
+
+        waitAndClickElement(driver, homePage.noteTab);
+        waitUntil(ExpectedConditions.elementToBeClickable(homePage.addNoteButton));
+
+        assertThat(homePage.noteTitleField.getText(), is("My Note Title"));
+        assertThat(homePage.noteDescriptionField.getText(), is("My Note Description"));
+
+        waitAndClickElement(driver, homePage.editNoteButton);
+        sendTextTo("Edited Note Title", homePage.modalNoteTitle);
+        waitAndClickElement(driver, homePage.modalNoteDescription);
+
+        sendTextTo("Edited Note Description", homePage.modalNoteDescription);
+        click(homePage.modalNoteSubmit);
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
+
+        driver.get(baseURL + "/home");
+
+        waitAndClickElement(driver, homePage.noteTab);
+        waitUntil(ExpectedConditions.elementToBeClickable(homePage.addNoteButton));
+
+        assertThat(homePage.noteTitleField.getText(), is("Edited Note Title"));
+        assertThat(homePage.noteDescriptionField.getText(), is("Edited Note Description"));
 
     }
 
     @Test
-    public void createEditDeleteACredential() {
-        signUp("user", "password");
-        login("user", "password");
+    public void testDeleteNote() {
+        signUp("deletenote", "password");
+        login("deletenote", "password");
 
-        waitAndClickElement(driver, homePage.credentialTab);
-        waitAndClickElement(driver, homePage.addCredentialButton);
+        createNote("My Note Title", "My Note Description");
 
-        waitAndClickElement(driver, homePage.modalCredentialUrl);
-        sendTextTo("www.udacity.com", homePage.modalCredentialUrl);
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
 
-        waitAndClickElement(driver, homePage.modalCredentialUsername);
-        sendTextTo("jonnyives", homePage.modalCredentialUsername);
+        driver.get(baseURL + "/home");
 
-        waitAndClickElement(driver, homePage.modalCredentialPassword);
-        sendTextTo("apple123", homePage.modalCredentialPassword);
+        waitAndClickElement(driver, homePage.noteTab);
+//        waitUntil(ExpectedConditions.elementToBeClickable(homePage.addNoteButton));
+        waitAndClickElement(driver, homePage.deleteNoteButton);
 
-        click(homePage.modalCredentialSubmit);
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
+    }
+
+    @Test
+    public void testCreateACredential() {
+        signUp("createcred", "password");
+        login("createcred", "password");
+
+        createCredential("www.udacity.com", "jonnyives", "apple123");
+
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
+    }
+
+    @Test
+    public void editACredential() {
+        signUp("editcred", "password");
+        login("editcred", "password");
+
+        createCredential("www.udacity.com", "jonnyives", "apple123");
 
         waitUntil(ExpectedConditions.titleContains("Result"));
         assertThat(driver.getTitle(), is("Result"));
@@ -174,12 +232,51 @@ class CloudStorageApplicationTests extends Utils {
         assertThat(homePage.credentialUrlField.getText(), is("www.other.com"));
         assertThat(homePage.credentialUsernameField.getText(), is("TimCook"));
         assertThat(homePage.credentialPasswordField.getText(), is(not("password123")));
+    }
+
+    @Test
+    public void testDeleteACredential() {
+        signUp("deletecred", "password");
+        login("deletecred", "password");
+
+        createCredential("www.udacity.com", "jonnyives", "apple123");
+
+        waitUntil(ExpectedConditions.titleContains("Result"));
+        assertThat(driver.getTitle(), is("Result"));
+
+        driver.get(baseURL + "/home");
+
+        waitAndClickElement(driver, homePage.credentialTab);
+//        waitUntil(ExpectedConditions.elementToBeClickable(homePage.addCredentialButton));
 
         waitAndClickElement(driver, homePage.deleteCredentialButton);
 
         waitUntil(ExpectedConditions.titleContains("Result"));
         assertThat(driver.getTitle(), is("Result"));
+    }
 
+    private void createCredential(String url, String username, String password) {
+        waitAndClickElement(driver, homePage.credentialTab);
+        waitAndClickElement(driver, homePage.addCredentialButton);
+        waitAndClickElement(driver, homePage.modalCredentialUrl);
+        sendTextTo(url, homePage.modalCredentialUrl);
+        waitAndClickElement(driver, homePage.modalCredentialUsername);
+        sendTextTo(username, homePage.modalCredentialUsername);
+        waitAndClickElement(driver, homePage.modalCredentialPassword);
+        sendTextTo(password, homePage.modalCredentialPassword);
+        click(homePage.modalCredentialSubmit);
+    }
+
+    private void createNote(String title, String description) {
+        waitAndClickElement(driver, homePage.noteTab);
+        waitAndClickElement(driver, homePage.addNoteButton);
+        waitAndClickElement(driver, homePage.modalNoteTitle);
+
+        sendTextTo(title, homePage.modalNoteTitle);
+        waitAndClickElement(driver, homePage.modalNoteDescription);
+
+        sendTextTo(description, homePage.modalNoteDescription);
+        click(homePage.modalNoteSubmit);
     }
 
 }

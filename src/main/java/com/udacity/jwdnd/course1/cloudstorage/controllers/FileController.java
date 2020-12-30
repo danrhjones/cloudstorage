@@ -26,7 +26,7 @@ public class FileController {
     }
 
     @PostMapping("/file")
-    public String createOrUpdateFile(Authentication authentication, MultipartFile fileUpload) throws IOException {
+    public String createFile(Authentication authentication, MultipartFile fileUpload) throws IOException {
         int userid = userService.getUserid(authentication.getName());
 
         if (fileUpload.isEmpty() || fileService.getFile(fileUpload.getOriginalFilename()) != null) {
